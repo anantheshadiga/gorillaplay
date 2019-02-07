@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/anantheshadiga/gorillaplay/hang"
 	"github.com/anantheshadiga/gorillaplay/jump"
 	"github.com/gorilla/mux"
 )
@@ -36,6 +37,7 @@ func (g *Gorilla) Start() (err error) {
 	r := mux.NewRouter()
 	r.HandleFunc("/gorilla", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte(logo)) })
 	r.Handle("/jump", jump.NewHandler())
+	r.Handle("/hang", hang.NewHandler())
 	srv := &http.Server{
 		Handler: r,
 		Addr:    "0.0.0.0:4242",
