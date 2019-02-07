@@ -3,12 +3,15 @@ package jump
 import (
 	"io"
 	"net/http"
+
+	"go.uber.org/zap"
 )
 
-type SiteHandler struct {
+type JumpHandler struct {
+	logger *zap.Logger
 }
 
-func (s *SiteHandler) ServeHTTP(w http.ResponseWriter, _ *http.Request) {
+func (s *JumpHandler) ServeHTTP(w http.ResponseWriter, _ *http.Request) {
 	jump := `
 	   ||
          ||
@@ -27,10 +30,11 @@ func (s *SiteHandler) ServeHTTP(w http.ResponseWriter, _ *http.Request) {
     \ \_/   / /  E_/
      \     / /
       '-._/-' 
-	`
+   `
+	s.logger.Info("Request to jump")
 	io.WriteString(w, jump)
 }
 
-func NewHandler() http.Handler {
-	return &SiteHandler{}
+func NewHandler(logger *zap.Logger) http.Handler {
+	return &JumpHandler{logger}
 }

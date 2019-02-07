@@ -3,9 +3,12 @@ package hang
 import (
 	"io"
 	"net/http"
+
+	"go.uber.org/zap"
 )
 
 type HangHandler struct {
+	logger *zap.Logger
 }
 
 func (s *HangHandler) ServeHTTP(w http.ResponseWriter, _ *http.Request) {
@@ -30,10 +33,11 @@ func (s *HangHandler) ServeHTTP(w http.ResponseWriter, _ *http.Request) {
              ><       ><
             ///\     /\\\
             '''       '''
-	`
+       `
+	s.logger.Info("Request to hang")
 	io.WriteString(w, jump)
 }
 
-func NewHandler() http.Handler {
-	return &HangHandler{}
+func NewHandler(logger *zap.Logger) http.Handler {
+	return &HangHandler{logger}
 }
